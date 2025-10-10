@@ -1,64 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import heroImage from "@/assets/everest-hero-dark.jpg";
 
 const Hero = () => {
-  const [snowflakes, setSnowflakes] = useState<Array<{ x: number; y: number; size: number; opacity: number }>>([]);
-  const mouseTrail = useRef<Array<{ x: number; y: number }>>([]);
-  const animationFrameId = useRef<number>();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const snowflakes = useMemo(() => 
+    [...Array(50)].map(() => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 5 + Math.random() * 10,
+      opacity: 0.3 + Math.random() * 0.7,
+      size: 8 + Math.random() * 12,
+      mouseInfluence: 0.2 + Math.random() * 0.3
+    }))
+  , []);
 
   useEffect(() => {
-    // Initialize snowflakes
-    const initialFlakes = [...Array(30)].map(() => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: 8 + Math.random() * 12,
-      opacity: 0.4 + Math.random() * 0.6
-    }));
-    setSnowflakes(initialFlakes);
-
     const handleMouseMove = (e: MouseEvent) => {
-      mouseTrail.current.unshift({ x: e.clientX, y: e.clientY });
-      if (mouseTrail.current.length > 30) {
-        mouseTrail.current.pop();
-      }
-    };
-
-    const animate = () => {
-      setSnowflakes(prevFlakes => 
-        prevFlakes.map((flake, index) => {
-          const target = mouseTrail.current[index] || mouseTrail.current[mouseTrail.current.length - 1];
-          if (!target) return flake;
-
-          const dx = target.x - flake.x;
-          const dy = target.y - flake.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance > 5) {
-            const speed = 0.1 + (index * 0.002);
-            return {
-              ...flake,
-              x: flake.x + dx * speed,
-              y: flake.y + dy * speed
-            };
-          }
-          return flake;
-        })
-      );
-      animationFrameId.current = requestAnimationFrame(animate);
+      setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    animationFrameId.current = requestAnimationFrame(animate);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -72,21 +39,28 @@ const Hero = () => {
       
       {/* Snowfall Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {snowflakes.map((flake, i) => (
-          <div
-            key={i}
-            className="absolute transition-all duration-100 ease-linear"
-            style={{
-              left: `${flake.x}px`,
-              top: `${flake.y}px`,
-              opacity: flake.opacity,
-              fontSize: `${flake.size}px`,
-              transform: 'translate(-50%, -50%)'
-            }}
-          >
-            ❄
-          </div>
-        ))}
+        {snowflakes.map((flake, i) => {
+          const offsetX = (mousePosition.x / window.innerWidth - 0.5) * 100 * flake.mouseInfluence;
+          const offsetY = (mousePosition.y / window.innerHeight - 0.5) * 100 * flake.mouseInfluence;
+          
+          return (
+            <div
+              key={i}
+              className="absolute animate-snowfall transition-transform duration-700 ease-out"
+              style={{
+                left: `${flake.left}%`,
+                top: `${flake.top}%`,
+                transform: `translate(${offsetX}px, ${offsetY}px)`,
+                animationDelay: `${flake.delay}s`,
+                animationDuration: `${flake.duration}s`,
+                opacity: flake.opacity,
+                fontSize: `${flake.size}px`
+              }}
+            >
+              ❄
+            </div>
+          );
+        })}
       </div>
       
       {/* Tech Grid Overlay */}
