@@ -1,9 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
 import heroImage from "@/assets/everest-hero-dark.jpg";
 
 const Hero = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const snowflakes = useMemo(() => 
+    [...Array(50)].map(() => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 5 + Math.random() * 10,
+      opacity: 0.3 + Math.random() * 0.7,
+      size: 8 + Math.random() * 12,
+      mouseInfluence: 0.2 + Math.random() * 0.3
+    }))
+  , []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Background Image */}
@@ -16,22 +39,28 @@ const Hero = () => {
       
       {/* Snowfall Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-snowfall"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `-${Math.random() * 20}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 10}s`,
-              opacity: 0.3 + Math.random() * 0.7,
-              fontSize: `${8 + Math.random() * 12}px`
-            }}
-          >
-            ❄
-          </div>
-        ))}
+        {snowflakes.map((flake, i) => {
+          const offsetX = (mousePosition.x / window.innerWidth - 0.5) * 100 * flake.mouseInfluence;
+          const offsetY = (mousePosition.y / window.innerHeight - 0.5) * 100 * flake.mouseInfluence;
+          
+          return (
+            <div
+              key={i}
+              className="absolute animate-snowfall transition-transform duration-700 ease-out"
+              style={{
+                left: `${flake.left}%`,
+                top: `${flake.top}%`,
+                transform: `translate(${offsetX}px, ${offsetY}px)`,
+                animationDelay: `${flake.delay}s`,
+                animationDuration: `${flake.duration}s`,
+                opacity: flake.opacity,
+                fontSize: `${flake.size}px`
+              }}
+            >
+              ❄
+            </div>
+          );
+        })}
       </div>
       
       {/* Tech Grid Overlay */}
