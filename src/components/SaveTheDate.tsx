@@ -43,6 +43,7 @@ const SaveTheDate = () => {
             <Button 
               size="lg" 
               className="px-8 py-6 text-lg font-semibold shadow-[0_0_30px_hsl(var(--primary-glow)/0.4)] hover:shadow-[0_0_50px_hsl(var(--primary-glow)/0.6)] hover:scale-105 transition-all"
+              onClick={() => document.getElementById('inscricao')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Garantir Minha Vaga
             </Button>

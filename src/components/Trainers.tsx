@@ -21,7 +21,7 @@ const trainers = [
 
 const Trainers = () => {
   return (
-    <section className="py-24 bg-secondary/20 relative overflow-hidden" id="trainers">
+    <section className="py-24 relative overflow-hidden bg-background/50" id="trainers">
       <div className="absolute inset-0 tech-grid opacity-10" />
       
       <div className="container mx-auto px-4 relative z-10">
