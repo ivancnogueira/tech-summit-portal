@@ -14,6 +14,26 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background/95" />
       </div>
       
+      {/* Snowfall Effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-snowfall"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `-${Math.random() * 20}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${5 + Math.random() * 10}s`,
+              opacity: 0.3 + Math.random() * 0.7,
+              fontSize: `${8 + Math.random() * 12}px`
+            }}
+          >
+            ❄
+          </div>
+        ))}
+      </div>
+      
       {/* Tech Grid Overlay */}
       <div className="absolute inset-0 tech-grid opacity-30" />
       

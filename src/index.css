@@ -124,4 +124,17 @@ All colors MUST be HSL.
       linear-gradient(90deg, hsl(var(--border) / 0.3) 1px, transparent 1px);
     background-size: 50px 50px;
   }
+  
+  @keyframes snowfall {
+    0% {
+      transform: translateY(-10vh) translateX(0);
+    }
+    100% {
+      transform: translateY(110vh) translateX(50px);
+    }
+  }
+  
+  .animate-snowfall {
+    animation: snowfall linear infinite;
+  }
 }
