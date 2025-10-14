@@ -35,7 +35,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#inscricao" className="text-background/70 hover:text-primary transition-colors">
+                <a href="#precos" className="text-background/70 hover:text-primary transition-colors">
                   Inscrição
                 </a>
               </li>

@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Ticket } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import heroImage from "@/assets/everest-hero-dark.jpg";
+import { ParticleTextEffect } from "@/components/ui/particle-text-effect";
 
 const Hero = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -66,6 +67,12 @@ const Hero = () => {
       {/* Tech Grid Overlay */}
       <div className="absolute inset-0 tech-grid opacity-30" />
       
+      {/* Particle Text Effect */}
+      <ParticleTextEffect 
+        words={["EVEREST BOOTCAMP"]} 
+        className="absolute top-[-15%] left-0 right-0 h-[200px] z-5" 
+      />
+      
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center max-w-5xl">
         <Badge className="mb-6 animate-glow-pulse px-6 py-2 text-sm bg-primary/20 border-primary text-primary hover:bg-primary/30">
@@ -84,9 +91,10 @@ const Hero = () => {
         <Button 
           size="lg" 
           className="px-8 py-6 text-lg font-semibold shadow-[0_0_30px_hsl(var(--primary-glow)/0.4)] hover:shadow-[0_0_50px_hsl(var(--primary-glow)/0.6)] hover:scale-105 transition-all"
-          onClick={() => document.getElementById('inscricao')?.scrollIntoView({ behavior: 'smooth' })}
+          onClick={() => document.getElementById('precos')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          Começar Agora
+          <Ticket className="mr-2 h-5 w-5" />
+          Quero Meu Ingresso
         </Button>
         
         <div className="mt-16 animate-bounce">
